@@ -1,0 +1,11 @@
+USE 777
+
+'NRLCRD 5
+
+WHILE V10! = 0
+
+ENDW
+
+P11 = (V1!, V2!, V3!, V4!, V5!, V6!)
+MOVEX A=8, AC=0, SM=0, M1X, P, P11, R=3.0, H=1, MS
+V10! = 0

@@ -38,16 +38,33 @@ while True:
 
         conn_cam.send('1'.encode('utf-8'))  # 相机拍照
         time.sleep(3)
-        pic = mpimg.imread('pic.jpg')
+        pic = mpimg.imread('rs-save-to-disk-output-Color.png')
         #   ------------------------------------------------------------------------------
         #   深度学习的部分，返回一个数组
         #   ------------------------------------------------------------------------------
 
-        #   ------------------------------------------------------------------------------
-        #   在point_list里面做坐标变换，记得先转换为float
-        #   ------------------------------------------------------------------------------
+
 
         for i in range(item_number):
+            x_temp = str(float(point_list[i][0]))
+            y_temp = str(float(point_list[i][1]))
+            if len(x_temp) > 8:
+                x_temp = x_temp[0:8]
+            elif len(x_temp) < 8:
+                for x in range(8 - len(x_temp)):
+                    x_temp += '0'
+            if len(y_temp) > 8:
+                y_temp = y_temp[0:8]
+            elif len(y_temp) < 8:
+                for y in range(8 - len(y_temp)):
+                    y_temp += '0'
+
+
+            #   ------------------------------------------------------------------------------
+            #   在point_list里面做坐标变换，记得先转换为float
+            #   ------------------------------------------------------------------------------
+
+
             point_list[i][0] = str(point_list[i][0])
             if len(point_list[i][0]) > 8:
                 point_list[i][0] = point_list[i][0][0:8]
@@ -61,9 +78,12 @@ while True:
                 for x in range(8 - len(point_list[i][1])):
                     point_list[i][1] += '0'
 
-            conn_cam.send(point_list[i][0].encode('utf-8'))
-            conn_cam.send(point_list[i][1].encode('utf-8'))    # 发送x，y给相机
-            depth = float(conn_cam.recv(1024))     # 接收检测到的深度
+            axis_rob = point_list[i][0] + point_list[i][1]
+
+            conn_cam.send(x_temp.encode('utf-8'))  # 发送x，y给相机
+            time.sleep(0.5)
+            conn_cam.send(y_temp.encode('utf-8'))
+            depth = float(conn_cam.recv(1024)) / 10000     # 接收检测到的深度
 
             # 坐标变换
 
@@ -74,9 +94,9 @@ while True:
                 for x in range(8 - len(depth)):
                     depth += '0'
 
-            conn.send(point_list[i][0].encode('utf-8'))
-            conn.send(point_list[i][1].encode('utf-8'))
-            conn.send(depth.encode('utf-8'))
+            axis_rob += depth
+
+            conn.send(axis_rob.encode('utf-8'))
 
             flag = conn.recv(1024)
             if flag != '1':   # 判断是否运行出错

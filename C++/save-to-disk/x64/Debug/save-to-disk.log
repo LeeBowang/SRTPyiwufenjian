@@ -1,0 +1,5 @@
+﻿  rs-save-to-disk.cpp
+c:\program files (x86)\intel realsense sdk 2.0\include\librealsense2\hpp\rs_device.hpp(251): warning C4267: “参数”: 从“size_t”转换到“int”，可能丢失数据
+  save-to-disk.vcxproj -> C:\Program Files (x86)\Intel RealSense SDK 2.0\samples\x64\Debug\save-to-disk.exe
+  C:\Program Files (x86)\Intel RealSense SDK 2.0\bin\x64\realsense2.dll
+  复制了 1 个文件
